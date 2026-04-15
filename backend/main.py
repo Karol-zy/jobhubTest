@@ -317,11 +317,7 @@ def update_reminder(
     if not payload:
         raise HTTPException(status_code=400, detail="No fields to update")
     response = (
-        sb.table("reminders")
-        .update(payload)
-        .eq("id", reminder_id)
-        .eq("user_id", user_id)
-        .execute()
+        sb.table("reminders").update(payload).eq("id", reminder_id).eq("user_id", user_id).execute()
     )
     if not response.data:
         raise HTTPException(status_code=404, detail="Reminder not found")
@@ -332,13 +328,7 @@ def update_reminder(
 def delete_reminder(reminder_id: str, authorization: Optional[str] = Header(default=None)):
     user_id = get_user_id(authorization)
     sb = get_supabase()
-    response = (
-        sb.table("reminders")
-        .delete()
-        .eq("id", reminder_id)
-        .eq("user_id", user_id)
-        .execute()
-    )
+    response = sb.table("reminders").delete().eq("id", reminder_id).eq("user_id", user_id).execute()
     if not response.data:
         raise HTTPException(status_code=404, detail="Reminder not found")
     return Response(status_code=204)
