@@ -10,6 +10,7 @@ from typing import Optional
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, Form, Header, HTTPException, Query, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from groq import Groq
 from postgrest.exceptions import APIError
 from pydantic import BaseModel, Field
 
@@ -1237,8 +1238,6 @@ def _call_groq(prompt: str) -> str:
     if not groq_key:
         raise HTTPException(status_code=503, detail="AI service is not configured")
     try:
-        from groq import Groq
-
         client = Groq(api_key=groq_key)
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
